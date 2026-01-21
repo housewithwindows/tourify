@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
-const crypt = require('bcrypt')
-const crypto = require('crypto')
-
-
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -15,43 +13,43 @@ const userSchema = new mongoose.Schema({
     },
     photo: String,
     role: {
+        type: String,
         enum: ['user', 'admin', 'moderator'],
         default: 'user',
-        type: String
     },
     password: {
         type: String,
         required: [true, 'Password is required'],
         minLength: [6, 'Password must be at least 6 characters'],
-        select: false
+        select: false,
     },
     isVerified: {
         type: Boolean,
-        default: false
+        default: false,
     },
     verificationCode: String,
-    verifivationCodeExpires: Date
+    verificationCodeExpires: Date,
+}, { timestamps: true });
 
-},{ timestamps: true });
+// Hash password before saving
+userSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) return next();
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+});
 
-
-userSchema.pre('save', async function(next){
-    if(!this.isModified('password')) return next()
-
-    this.password = await crypt.hash(this.password,12)
-    
-    next()
-})
-// ვადარებთ პაროლებს 
-userSchema.methods.comparePasswords = async (candidate,password) => {
-    return await crypt.compare(candidate, password);
+// Compare passwords
+userSchema.methods.comparePasswords = async function(candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password);
 }
 
-userSchema.methods.createVerificationCode = function(){
-    const code = crypto.randomBytes(12).toString('hex')
-    this.verificationCode = code
-    return code
+// Create verification code
+userSchema.methods.createVerificationCode = function() {
+    const code = crypto.randomBytes(12).toString('hex');
+    this.verificationCode = code;
+    return code;
 }
 
-const User = mongoose.model('Users',userSchema)
+const User = mongoose.model('Users', userSchema);
+
 module.exports = User;

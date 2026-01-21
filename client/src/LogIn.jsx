@@ -10,44 +10,41 @@ const LogIn = () => {
     const [password, setPassword] = useState("");
 
     useEffect(() => {
-        const savedEmail = localStorage.getItem("email");// creating saved email
-        const savedPassword = localStorage.getItem("password");//creating saved password
-        if (savedEmail) setEmail(savedEmail);// if we have saved email use it
-        if (savedPassword) setPassword(savedPassword);// same as email
+        const savedEmail = localStorage.getItem("email");
+        const savedPassword = localStorage.getItem("password");
+        if (savedEmail) setEmail(savedEmail);
+        if (savedPassword) setPassword(savedPassword);
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // save email and password to localstorage
         localStorage.setItem("email", email);
         localStorage.setItem("password", password);
 
         const formObj = {
-            email: e.target.email.value,//sets email as inputed value
-            password: e.target.password.value//sets password as inputed value
+            email: e.target.email.value,
+            password: e.target.password.value
         };
-        
+
         try {
             const loggedInUser = await login(formObj);
             if (loggedInUser) {
-                alert(`Logged in as: ${loggedInUser.fullname}`);// alerting that they logged in as their fullname
-                navigate("/");//going back to home page
+                alert(`Logged in as: ${loggedInUser.fullname}`);
+                navigate("/");
             }
         } catch (error) {
-            alert("Login failed. Please check your credentials.");//alerts check credentials if incorrect
+            alert("Login failed. Please check your credentials.");
         }
-        setEmail("")
-        setPassword("")
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-900">
+        <div className="flex justify-center items-center h-screen bg-green-50">
             <form
-                className="bg-gray-800 p-8 rounded shadow-md w-full max-w-sm text-white"
+                className="bg-green-200 p-8 rounded shadow-md w-full max-w-sm text-gray-900"
                 onSubmit={handleSubmit}
             >
-                <h1 className="text-3xl font-bold mb-6 text-center">Log In</h1>
+                <h1 className="text-3xl font-bold mb-6 text-center text-green-900">Log In</h1>
 
                 <input
                     type="text"
@@ -56,7 +53,7 @@ const LogIn = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full p-2 mb-4 rounded bg-gray-700 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 mb-4 rounded bg-green-100 text-green-900 placeholder-green-700 focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
 
                 <input
@@ -66,12 +63,12 @@ const LogIn = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full p-2 mb-6 rounded bg-gray-700 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 mb-6 rounded bg-green-100 text-green-900 placeholder-green-700 focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+                    className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
                 >
                     Log In
                 </button>

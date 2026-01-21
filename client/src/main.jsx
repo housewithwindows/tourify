@@ -6,6 +6,7 @@ import { AuthProvider } from './AuthContext.jsx'
 import { TourProvider } from './TourContext.jsx'
 
 createRoot(document.getElementById('root')).render(
+  //wrapping our app component with all the providers
   <BrowserRouter>
     <AuthProvider>
       <TourProvider>

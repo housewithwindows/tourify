@@ -1,41 +1,41 @@
 import { useAuth } from "./AuthContext";
-import Tours from "./Tours";
 
 const Profile = () => {
   const { user } = useAuth();
 
-  // If user is null or undefined  render a loading  message
   if (!user) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-400">
+      <div className="flex justify-center items-center h-screen text-gray-500 bg-green-50 font-semibold text-lg">
         Loading profile...
       </div>
     );
   }
 
-return (
-    <div className="p-6 w-screen h-screen text-white bg-gray-900 rounded shadow text-base">
-      <main className="max-w-4xl mx-auto p-6 text-white">
-        <h1 className="text-4xl font-bold mb-8">Tourify Profile</h1>
+  return (
+    <div className="min-h-screen bg-green-50 text-gray-900">
+      <main className="max-w-4xl mx-auto p-6">
+        <h2 className="text-4xl font-extrabold text-green-700 mb-8">Tourify Profile</h2>
 
-        <section className="mb-10 bg-gray-800 p-6 rounded shadow">
-          <h2 className="text-2xl font-semibold mb-4">User Info</h2>
-          <p className="mb-2">
-            <span className="font-semibold">Email:</span> {user.email || "N/A"}
+        <section className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-2xl font-semibold text-green-700 mb-6">User Info</h3>
+          <p className="mb-4 text-lg font-medium">
+            <span className="font-bold text-green-900">Email:</span> {user.email || "N/A"}
           </p>
-          <p className="mb-2">
-            <span className="font-semibold">Full Name:</span> {user.fullname || "N/A"}
+          <p className="mb-4 text-lg font-medium">
+            <span className="font-bold text-green-900">Full Name:</span> {user.fullname || "N/A"}
           </p>
-          <p>
-            <span className="font-semibold">Verified:</span>{" "}
-            {user.isVerified ? "Yes" : "No"}
+          <p className="text-lg font-medium">
+            <span className="font-bold text-green-900">Verified:</span> {user.isVerified ? "Yes" : "No"}
           </p>
         </section>
       </main>
     </div>
-);}
+  );
+};
 
 export default Profile;
+
+
 
 
 
