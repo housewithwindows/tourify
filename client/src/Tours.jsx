@@ -97,14 +97,24 @@ const Tours = () => {
   };
 
   const handleBuy = () => {
-    if (cart.length === 0) {
-      alert("Cart is empty");
-      return;
-    }
-    setCart([]);
+  if (cart.length === 0) {
+    alert("Cart is empty");
+    return;
+  }
+
+  setCart([]);
+
+  
+  setBuyMessage("");
+  setTimeout(() => {
     setBuyMessage("Thank you for your purchase!");
-    setTimeout(() => setBuyMessage(""), 3000);
-  };
+  }, 50);
+
+  setTimeout(() => {
+    setBuyMessage("");
+  }, 3000);
+};
+
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-gray-900 p-8 overflow-auto">
@@ -258,7 +268,7 @@ const Tours = () => {
                     Description: <span className="font-medium">{tour.description}</span>
                   </p>
                   <p className="text-lg font-bold mb-2 text-green-700">{tour.price}$</p>
-                  <p className="text-xs text-green-600 mb-4 font-semibold">Author: {tour.author}</p> {/* ✅ fullname */}
+                  <p className="text-xs text-green-600 mb-4 font-semibold">Author: {tour.author}</p> 
 
                   <div className="flex flex-wrap gap-2">
                     {tour.author === user?.fullname && (
