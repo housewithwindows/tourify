@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
+import {
+  ShoppingCartIcon,
+  TrashIcon,
+  PencilSquareIcon,
+  PlusCircleIcon,
+  CheckCircleIcon,
+  SparklesIcon,
+} from "@heroicons/react/24/outline";
 
 const Tours = () => {
   const { user } = useAuth();
 
   const [tours, setTours] = useState([]);
   const [cart, setCart] = useState([]);
-
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [duration, setDuration] = useState("");
@@ -16,11 +23,8 @@ const Tours = () => {
 
   // Load from localStorage on mount
   useEffect(() => {
-    const savedTours = localStorage.getItem("tours");
-    if (savedTours) setTours(JSON.parse(savedTours));
-
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) setCart(JSON.parse(savedCart));
+    setTours(JSON.parse(localStorage.getItem("tours")) || []);
+    setCart(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
 
   // Save tours and cart to localStorage whenever they change
@@ -60,7 +64,7 @@ const Tours = () => {
           duration,
           description,
           price: numericPrice,
-          author: user?.fullname || "Anonymous", // ✅ use fullname here
+          author: user?.fullname || "Anonymous",
         },
       ]);
     }
@@ -96,37 +100,51 @@ const Tours = () => {
     setCart(cart.filter((item) => item.id !== id));
   };
 
+  // ✅ Fixed handleBuy
   const handleBuy = () => {
-  if (cart.length === 0) {
-    alert("Cart is empty");
-    return;
-  }
+    if (cart.length === 0) {
+      alert("Cart is empty");
+      return;
+    }
 
-  setCart([]);
-
-  
-  setBuyMessage("");
-  setTimeout(() => {
+    // Show success message immediately
     setBuyMessage("Thank you for your purchase!");
-  }, 50);
 
-  setTimeout(() => {
-    setBuyMessage("");
-  }, 3000);
-};
+    // Clear cart
+    setCart([]);
 
+    // Hide message after 3 seconds
+    setTimeout(() => {
+      setBuyMessage("");
+    }, 3000);
+  };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-green-100 via-green-50 to-green-100 text-gray-900 p-8 overflow-auto">
-      <div className="max-w-6xl mx-auto space-y-10">
+    <div className="min-h-screen bg-gradient-to-br from-green-100 via-green-50 to-green-100 p-8">
+      <div className="max-w-7xl mx-auto space-y-12">
+
+        {/* Hero */}
+        <div className="text-center space-y-4">
+          <SparklesIcon className="h-14 w-14 mx-auto text-green-600 animate-pulse" />
+          <h1 className="text-4xl font-extrabold text-green-900">
+            Explore Beautiful Destinations
+          </h1>
+          <p className="text-green-700 max-w-xl mx-auto">
+            Discover hand-picked tours and manage your own experiences.
+          </p>
+        </div>
 
         {/* Buy Message */}
-        {buyMessage && <p className="text-green-700 font-bold">{buyMessage}</p>}
+        {buyMessage && (
+          <div className="flex items-center justify-center gap-2 text-green-700 font-bold animate-bounce">
+            <CheckCircleIcon className="h-6 w-6" />
+            {buyMessage}
+          </div>
+        )}
 
         {/* Available Tours */}
         <h2 className="text-3xl font-bold text-green-800">Available Tours</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-
           {/* Paris */}
           <div className="bg-white rounded-xl shadow-lg border border-green-300 p-5">
             <h3 className="text-xl font-semibold text-green-900">Paris City Highlights</h3>
@@ -237,7 +255,7 @@ const Tours = () => {
                     onClick={() => handleRemoveFromCart(item.id)}
                     className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
                   >
-                    Remove
+                    <TrashIcon className="h-5 w-5" />
                   </button>
                 </div>
               ))}
@@ -261,36 +279,35 @@ const Tours = () => {
               <div key={tour.id} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden border border-green-300">
                 <div className="p-5">
                   <h3 className="text-xl font-semibold mb-2 text-green-900">{tour.title}</h3>
-                  <p className="text-sm mb-1">
-                    Duration: <span className="font-medium">{tour.duration}</span>
-                  </p>
-                  <p className="text-sm mb-2">
-                    Description: <span className="font-medium">{tour.description}</span>
-                  </p>
+                  <p className="text-sm mb-1">Duration: <span className="font-medium">{tour.duration}</span></p>
+                  <p className="text-sm mb-2">Description: <span className="font-medium">{tour.description}</span></p>
                   <p className="text-lg font-bold mb-2 text-green-700">{tour.price}$</p>
-                  <p className="text-xs text-green-600 mb-4 font-semibold">Author: {tour.author}</p> 
+                  <p className="text-xs text-green-600 mb-4 font-semibold">Author: {tour.author}</p>
 
                   <div className="flex flex-wrap gap-2">
                     {tour.author === user?.fullname && (
                       <>
                         <button
                           onClick={() => handleEditTour(tour)}
-                          className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black py-1.5 rounded-lg text-sm font-medium"
+                          className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black py-1.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1"
                         >
+                          <PencilSquareIcon className="h-4 w-4" />
                           Edit
                         </button>
                         <button
                           onClick={() => handleDeleteTour(tour.id)}
-                          className="flex-1 bg-red-600 hover:bg-red-700 py-1.5 rounded-lg text-sm font-medium"
+                          className="flex-1 bg-red-600 hover:bg-red-700 py-1.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1"
                         >
+                          <TrashIcon className="h-4 w-4" />
                           Delete
                         </button>
                       </>
                     )}
                     <button
                       onClick={() => handleAddToCart(tour)}
-                      className="w-full bg-blue-600 hover:bg-blue-700 py-1.5 rounded-lg text-sm font-medium"
+                      className="w-full bg-blue-600 hover:bg-blue-700 py-1.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1"
                     >
+                      <ShoppingCartIcon className="h-4 w-4 animate-pulse" />
                       Add to Cart
                     </button>
                   </div>
@@ -303,7 +320,10 @@ const Tours = () => {
         {/* Admin Panel */}
         {user && (
           <div className="bg-white p-5 rounded-xl shadow-lg border border-green-300">
-            <h2 className="text-2xl font-bold text-green-800 mb-3">Admin Panel</h2>
+            <h2 className="text-2xl font-bold text-green-800 mb-3 flex items-center gap-2">
+              <PlusCircleIcon className="h-6 w-6" />
+              {editingId ? "Update Tour" : "Add New Tour"}
+            </h2>
             <form onSubmit={handleAddOrUpdateTour} className="space-y-3">
               <input
                 type="text"
@@ -336,7 +356,9 @@ const Tours = () => {
               <button
                 type="submit"
                 className={`w-full py-2 rounded-lg font-bold ${
-                  editingId ? "bg-yellow-400 hover:bg-yellow-500" : "bg-blue-600 hover:bg-blue-700 text-white"
+                  editingId
+                    ? "bg-yellow-400 hover:bg-yellow-500"
+                    : "bg-blue-600 hover:bg-blue-700 text-white"
                 }`}
               >
                 {editingId ? "Update Tour" : "Add Tour"}
@@ -344,13 +366,13 @@ const Tours = () => {
             </form>
           </div>
         )}
-
       </div>
     </div>
   );
 };
 
 export default Tours;
+
 
 
 
