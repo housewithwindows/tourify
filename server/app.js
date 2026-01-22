@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 };
 
 app.use(cors({
-    origin: "https://tourify-1.onrender.com/",
+    origin: "https://tourify-24a5.onrender.com",
     credentials: true               
 }));
 
